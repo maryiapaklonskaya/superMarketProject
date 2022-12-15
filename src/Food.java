@@ -8,8 +8,8 @@ public class Food extends Item{
     private boolean containsAllergens;
     private int id;
 
-    public Food(float price, String name, int calories, FoodType foodType, boolean containsAllergens){
-        super(price);
+    public Food(float price, String name, int calories, FoodType foodType, boolean containsAllergens, Producer producer){
+        super(price, producer);
         this.name = name;
         this.calories = calories;
         this.foodType = foodType;
@@ -66,7 +66,7 @@ public class Food extends Item{
 
     @Override
     public String toString(){
-        return "\nid: " + id + " name: " + name + "\ncalories: " + calories + " FoodType: " + foodType + "\ncontains allergens: " + containsAllergens + "\nprice: " + getPrice();
+        return "\n\nid: " + id + " name: " + name + "\ncalories: " + calories + " FoodType: " + foodType + "\ncontains allergens: " + containsAllergens + "\nprice: " + getPrice() + "\nproducer: " + getProducer().getName();
 
     }
 }

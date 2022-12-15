@@ -7,8 +7,8 @@ public class Clothes extends Item {
     private int id;
 //    private static int count = 0;
 
-    public Clothes(float price, Type type, float size) {
-        super(price);
+    public Clothes(float price, Type type, float size, Producer producer) {
+        super(price, producer);
         this.size = size;
         this.type = type;
         id = super.getCount();
@@ -22,6 +22,10 @@ public class Clothes extends Item {
 
     public Type getType() {
         return type;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public static String getCategory() {
@@ -52,6 +56,20 @@ public class Clothes extends Item {
 
     @Override
     public String toString(){
-        return "\nid: " + id + " type: " + type + " size: " + size + " price: " + getPrice();
+        return "\nid: " + id + " type: " + type + " size: " + size + " price: " + getPrice() + " producer: " + getProducer().getName();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Clothes clothes = (Clothes) o;
+        return (type.equals(clothes.getType()) && (size == clothes.getSize()) && (id == clothes.getId()));
+    }
+
+    @Override
+    public int hashCode(){
+        int result = 17 * (type.hashCode() + ((Float) size).hashCode() + ((Integer) id).hashCode());
+        return result;
     }
 }
