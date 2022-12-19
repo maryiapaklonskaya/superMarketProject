@@ -12,6 +12,8 @@
 import ENUMs.FoodType;
 import ENUMs.Type;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.*;
 
 public class SuperMarket {
@@ -23,17 +25,24 @@ public class SuperMarket {
 
 
     public static void main(String[] args) {
-        Producer producer1 = new Producer("nike", 111d);
-        Producer producer2 = new Producer("adidas", 222d);
-        Producer producer3 = new Producer("reebok", 333d);
+        Producer producer1 = new Producer("mike", 111d);
+        Producer producer2 = new Producer("nike", 222d);
+        Producer producer3 = new Producer("nikes", 333d);
+        Producer producer4 = new Producer("nikez", 333d);
+        Producer producer5 = new Producer("nike prod", 333d);
+
+
 
         Clothes clothes1 = new Clothes(29.99f, Type.SHOES, 36.0f, producer1);
-        Clothes clothes2 = new Clothes(45.55f, Type.SHIRT, 42.0f, producer1);
-        Clothes clothes3 = new Clothes(33.33f, Type.PANTS, 94.0f, producer1);
+        Clothes clothes2 = new Clothes(45.55f, Type.SHIRT, 42.0f, producer2);
+        Clothes clothes3 = new Clothes(33.33f, Type.PANTS, 94.0f, producer3);
 
         Food food1 = new Food(5.99f, "sandwich with tuna", 250, FoodType.GROCERIES, true, producer1);
-        Food food2 = new Food(1.99f, "black tea", 50, FoodType.DRINKS, false, producer1);
-        Food food3 = new Food(15.99f, "beef stake", 750, FoodType.MEAT, false, producer1);
+        Food food2 = new Food(1.99f, "black tea", 50, FoodType.DRINKS, false, producer5);
+        Food food3 = new Food(15.99f, "beef stake", 750, FoodType.MEAT, false, producer2);
+        Food food4 = new Food(15.99f, "beef stake1", 750, FoodType.MEAT, false, producer4);
+        Food food5 = new Food(15.99f, "beef stake", 750, FoodType.MEAT, false, producer3);
+        Food food6 = new Food(15.99f, "beef stake", 750, FoodType.MEAT, false, producer4);
 
         Customer customer1 = new Customer("Maryia", 123d);
         Customer customer2 = new Customer("Crowley", 0d);
@@ -51,6 +60,11 @@ public class SuperMarket {
         foodList.add(food1);
         foodList.add(food2);
         foodList.add(food3);
+        foodList.add(food4);
+        foodList.add(food5);
+        foodList.add(food6);
+
+        
 
         //List<Producer> producersList = new ArrayList<>();
         producersList.add(producer1);
@@ -69,17 +83,47 @@ public class SuperMarket {
 
 //
 
-        System.out.println(map.get("Clothing"));
-        System.out.println(map.get("Food"));
+//        System.out.println(map.get("Clothing"));
+//        System.out.println(map.get("Food"));
 
         //printCatalogue();
         //printCategories();
         //printProducers();
         //printCustomers();
 
-        System.out.println(clothes1.equals(clothes2));
+        //System.out.println(clothes1.equals(clothes2));
 
-        comparingItems("Clothing");
+        //comparingItems("Food");
+        sortByProducer();
+
+
+        FileInputStream in = null;
+        FileOutputStream out = null;
+
+        try{
+            in = new FileInputStream("src/files/customers.txt");
+            out = new FileOutputStream("src/files/sorted-customers.txt");
+            List<String> namesList = new ArrayList<>();
+
+            int c = in.read();
+            namesList.add(String.valueOf(c));
+
+            while(c != -1){
+                c = in.read();
+                namesList.add(String.valueOf(c));
+            }
+
+            namesList.stream().sorted(Comparator.naturalOrder());
+            for(String item: namesList){
+                out.write(c);
+            }
+
+        }catch(Exception ex){
+            ex.printStackTrace();
+
+        }
+
+        //customersSort();
 
     }
 
@@ -116,20 +160,97 @@ public class SuperMarket {
 
     public static void comparingItems(String category) {
         List<Item> items = map.get(category);
-        Map<String, List<Item>> temp = new HashMap<>();
+
+        Collections.sort(items, new Comparator<Item>() {
+            @Override
+            public int compare(Item i1, Item i2) {
+                if(i1.getPrice() == i2.getPrice()){
+                    return ((int) i1.getProducer().getName().charAt(0) - (int) i2.getProducer().getName().charAt(0));
+                }else{
+                    return ((int) i1.getPrice() - (int) i2.getPrice());
+                }
+            }
+
+        });
 
         for (Item item : items) {
-            if (temp.containsKey(item.getCategory())) {
-                temp.get(item.getName()).add(item);
-            } else {
-                List<Item> itemsSorted = new ArrayList<>();
-                itemsSorted.add(item);
-                temp.put(item.getName(), itemsSorted);
+            System.out.println("price: " + item.getPrice() + " producer: " + item.getProducer().getName());
+        }
+    }
+
+    public static void sortByProducer() {
+        List<Item> temp;
+        List<Item> allItems = new ArrayList<>();
+
+        for (Map.Entry<String, List<Item>> entry : map.entrySet()) {
+            temp = entry.getValue();
+            for (Item item : temp) {
+                allItems.add(item);
             }
         }
 
-        map.forEach((key, value) -> System.out.println(key + ":" + value));
+        System.out.println("======================================================");
+        for (Item item : allItems) {
+            System.out.println(item);
+        }
+        System.out.println("======================================================");
+
+
+        Collections.sort(allItems, new Comparator<Item>() {
+            @Override
+            public int compare(Item i1, Item i2) {
+                //
+                int length;
+                int result;
+
+                if (i1.getProducer().getName().length() > i2.getProducer().getName().length()) {
+                    length = i2.getProducer().getName().length();
+                } else {
+                    length = i1.getProducer().getName().length();
+                }
+
+                for (int i = 0; i <= length; i++) {
+                    //maybe we should simply check if all characters were checked
+                    if(i >= i2.getProducer().getName().length()){
+                        return 1;
+                    }else if(i >= i1.getProducer().getName().length()){
+                        return -1;
+                    }else {
+                        result = (int) i1.getProducer().getName().charAt(i) - (int) i2.getProducer().getName().charAt(i);
+                        if (result != 0) {
+                            return result;
+                        }
+                    }
+                }
+                return 0;
+            }
+        });
+
+        for (Item item : allItems) {
+            System.out.println(item);
+        }
+
     }
+
+//    public static void customersSort(){
+//        Collections.sort(customersList);
+//
+//
+//        FileOutputStream out = null;
+//
+//        try{
+//            out = new FileOutputStream("src/files/sorted-customers.txt");
+//            for(Customer c: customersList){
+//                out.write(c);
+//            }
+//
+//        }catch(Exception ex){
+//            ex.printStackTrace();
+//        }
+//    }
+
+
+
 
 
 

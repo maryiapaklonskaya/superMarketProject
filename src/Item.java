@@ -1,4 +1,4 @@
-abstract class Item {
+abstract class Item implements Comparable<Item>{
     private float price;
     static int count;
     private Producer producer;
@@ -35,5 +35,10 @@ abstract class Item {
 
     public void setProducer(Producer producer) {
         this.producer = producer;
+    }
+
+    @Override
+    public int compareTo(Item item){
+        return (int) (this.price - item.getPrice());
     }
 }

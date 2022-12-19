@@ -64,9 +64,15 @@ public class Food extends Item{
         this.foodType = foodType;
     }
 
+//    @Override
+//    public String toString(){
+//        return "\n\nid: " + id + " name: " + name + "\ncalories: " + calories + " FoodType: " + foodType + "\ncontains allergens: " + containsAllergens + "\nprice: " + getPrice() + "\nproducer: " + getProducer().getName();
+//
+//    }
+
     @Override
     public String toString(){
-        return "\n\nid: " + id + " name: " + name + "\ncalories: " + calories + " FoodType: " + foodType + "\ncontains allergens: " + containsAllergens + "\nprice: " + getPrice() + "\nproducer: " + getProducer().getName();
+        return "producer: " + getProducer().getName();
 
     }
 }

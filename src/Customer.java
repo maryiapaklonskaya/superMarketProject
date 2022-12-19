@@ -1,6 +1,6 @@
 // add collection of customers ( name, balance, email, phone )
 
-public class Customer {
+public class Customer implements Comparable<Customer>{
     private String name;
     private Double balance;
     private String email = "default email";
@@ -54,4 +54,35 @@ public class Customer {
     public String toString(){
         return "Customer name: " + name + " email: " + email + " balance: " + balance + " phone: " + phone;
     }
+
+    @Override
+    public int compareTo(Customer customer){
+        int length;
+        int i = 0;
+        int result;
+
+        if(this.name.length() > customer.getName().length()){
+            length = this.name.length();
+        } else {
+            length = customer.getName().length();
+        }
+
+        while(i < length) {
+            result =  this.name.charAt(i) - customer.getName().charAt(i);
+            i++;
+            if (result != 0) {
+                return result;
+            }
+        }
+
+        result = (int) (this.balance - customer.getBalance());
+        if (result != 0) {
+            return result;
+        }
+
+        return 0;
+
+    }
 }
+
+//name customer + balance - to write in the file

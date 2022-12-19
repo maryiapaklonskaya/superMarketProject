@@ -54,9 +54,14 @@ public class Clothes extends Item {
         this.type = type;
     }
 
+//    @Override
+//    public String toString(){
+//        return "\nid: " + id + " type: " + type + " size: " + size + " price: " + getPrice() + " producer: " + getProducer().getName();
+//    }
+
     @Override
     public String toString(){
-        return "\nid: " + id + " type: " + type + " size: " + size + " price: " + getPrice() + " producer: " + getProducer().getName();
+        return "producer: " + getProducer().getName();
     }
 
     @Override

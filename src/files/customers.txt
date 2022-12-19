@@ -1,0 +1,6 @@
+Sam 1200
+Maryia 1222
+Vlad 1211
+Crowley 100
+Mashenka 1100
+Marya 1200.33
